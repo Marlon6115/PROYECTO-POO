@@ -4,6 +4,7 @@ import javafx.fxml.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.proyectopoo.HelloApplication;
 import org.example.proyectopoo.util.Alertas;
 
 public class LoginController {
@@ -25,11 +26,11 @@ public class LoginController {
         String clave = txtPassword.getText();
         String rol = cbRol.getValue();
 
-        if (usuario.equals("admin") && clave.equals("1234") && "ADMIN".equals(rol)) {
+        if (usuario.equals("admin") && clave.equals("123") && "ADMIN".equals(rol)) {
             VentanaEstudiantes(rol);
-        } else if (usuario.equals("user") && clave.equals("1234") && "ESTANDAR".equals(rol)) {
+        } else if (usuario.equals("user") && clave.equals("123") && "ESTANDAR".equals(rol)) {
             VentanaEstudiantes(rol);
-        } else if (usuario.equals("guest") && clave.equals("1234") && "INVITADO".equals(rol)) {
+        } else if (usuario.equals("guest") && clave.equals("123") && "INVITADO".equals(rol)) {
             VentanaEstudiantes(rol);
         } else {
             lblMensaje.setText("Credenciales incorrectas. Intente nuevamente.");
@@ -38,7 +39,7 @@ public class LoginController {
 
     private void VentanaEstudiantes(String rol) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/gestor_estudiantes/view/estudiantes.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/org/example/proyectopoo/estudiantes.fxml"));
             Scene scene = new Scene(loader.load());
             EstudianteController controller = loader.getController();
             controller.setRolUsuario(rol);
