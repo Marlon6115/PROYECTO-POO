@@ -106,6 +106,7 @@ public class EstudianteDAO implements Crud{
             ps.setString(3, estudiante.getApellido());
             ps.setString(4, estudiante.getCorreo());
             ps.setString(5, estudiante.getCarrera());
+            ps.executeUpdate();
 
         }catch (SQLException e) {
             Alertas.error("ERROR", "Error al insertar: " + e.getMessage());

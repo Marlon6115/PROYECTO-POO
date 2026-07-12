@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.proyectopoo.HelloApplication;
 import org.example.proyectopoo.dao.EstudianteDAO;
 import org.example.proyectopoo.modelo.Estudiante;
 import org.example.proyectopoo.util.Alertas;
@@ -46,7 +47,7 @@ public class EstudianteController {
     @FXML
     public void initialize() {
         cbCarrera.getItems().addAll(
-                "Agua y Saneamiento Ambiental", "Desarrollo de Software", "Electromecánica", "Redes y Telecomunicaciones");
+                "Seleccione...", "Agua y Saneamiento Ambiental", "Desarrollo de Software", "Electromecánica", "Redes y Telecomunicaciones");
         cbFiltroCarrera.getItems().addAll("Todas las carreras", "Agua y Saneamiento Ambiental", "Desarrollo de Software", "Electromecánica", "Redes y Telecomunicaciones");
 
         colId.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
@@ -61,9 +62,9 @@ public class EstudianteController {
                 (obs, oldSelection, newSelection) -> {
                     if (newSelection != null) {
                         txtCedula.setText(newSelection.getCedula());
-                        txtNombre.setText(newSelection.getCedula());
-                        txtApellido.setText(newSelection.getCedula());
-                        txtCorreo.setText(newSelection.getCedula());
+                        txtNombre.setText(newSelection.getNombre());
+                        txtApellido.setText(newSelection.getApellido());
+                        txtCorreo.setText(newSelection.getCorreo());
                         cbCarrera.setValue(newSelection.getCarrera());
                     }
                 });
@@ -94,25 +95,26 @@ public class EstudianteController {
         } else {
             Alertas.informacion("INFORMACION", "El registro fue cancelado por el usuario.");
         }
-
+        cargarTabla();
     }
 
     @FXML
     private void actualizar() {
-        cargarTabla();
         txtCedula.clear();
         txtNombre.clear();
         txtApellido.clear();
         txtCorreo.clear();
         txtBuscar.clear();
-        cbCarrera.getSelectionModel().clearSelection();
-        cbFiltroCarrera.getSelectionModel().clearSelection();
+        cbCarrera.getSelectionModel().selectFirst();
+        cbFiltroCarrera.getSelectionModel().selectFirst();
+
+        cargarTabla();
     }
 
     @FXML
     private void salir() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/gestor_estudiantes/view/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/org/example/proyectopoo/login.fxml"));
             Scene scene = new Scene(loader.load());
 
             Stage stage = new Stage();
@@ -125,6 +127,17 @@ public class EstudianteController {
         } catch (Exception e) {
             Alertas.error("ERROR", "No se pudo regresar al login: " + e.getMessage());
         }
+    }
+
+
+    @FXML
+    private void eliminar() {
+
+    }
+
+    @FXML
+    private void editar() {
+
     }
 
 
