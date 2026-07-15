@@ -45,32 +45,6 @@ public class EstudianteDAO implements Crud{
     }
 
     @Override
-    public List<Estudiante> filtrarCarrera(String carrera) {
-        List<Estudiante> lista = new ArrayList<>();
-        String sql = "SELECT * FROM estudiantes WHERE carrera = ?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, carrera);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                lista.add(new Estudiante(
-                        rs.getInt("id"),
-                        rs.getString("cedula"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getString("correo"),
-                        rs.getString("carrera")
-                ));
-            }
-        } catch (SQLException e) {
-            Alertas.error("ERROR", "Error al mostrar: " + e.getMessage());
-        }
-        return lista;
-    }
-
-
-    @Override
     public Estudiante buscar(String opcion) {
 
         String sql = "select * from estudiantes where cedula = ? or concat(nombre, ' ', like ?)";
@@ -120,7 +94,7 @@ public class EstudianteDAO implements Crud{
     }
 
     @Override
-    public void eliminar(int id) {
+    public void eliminar(Estudiante estudiante) {
 
     }
 

@@ -16,14 +16,13 @@ public class EstudianteController {
 
     @FXML private TextField txtCedula, txtNombre, txtApellido, txtCorreo, txtBuscar;
     @FXML private ComboBox<String> cbCarrera, cbFiltroCarrera;
-    @FXML private Spinner<Integer> spEdad;
     @FXML private TableView<Estudiante> tablaEstudiantes;
     @FXML private TableColumn<Estudiante, Integer> colId;
     @FXML private TableColumn<Estudiante, String> colNombreCompleto;
     @FXML private TableColumn<Estudiante, String> colCarrera;
     @FXML private TableColumn<Estudiante, String> colEmail;
     @FXML private Label lblUsuario;
-    @FXML private Button btnGuardar, btnActualizar, btnEliminar, btnEditar, btnSalir;
+    @FXML private Button btnGuardar, btnRefrescar, btnEliminar, btnEditar, btnSalir, btnBuscar;
 
     private EstudianteDAO dao = new EstudianteDAO();
 
@@ -32,7 +31,7 @@ public class EstudianteController {
 
         if (rol.equals("INVITADO")) {
             btnGuardar.setDisable(true);
-            btnActualizar.setDisable(true);
+            btnEditar.setDisable(true);
             btnEliminar.setDisable(true);
         } else if (rol.equals("ESTANDAR")) {
             btnEliminar.setDisable(true);
@@ -48,8 +47,6 @@ public class EstudianteController {
     public void initialize() {
         cbCarrera.getItems().addAll(
                 "Seleccione...", "Agua y Saneamiento Ambiental", "Desarrollo de Software", "Electromecánica", "Redes y Telecomunicaciones");
-        cbFiltroCarrera.getItems().addAll("Todas las carreras", "Agua y Saneamiento Ambiental", "Desarrollo de Software", "Electromecánica", "Redes y Telecomunicaciones");
-
         colId.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
         colNombreCompleto.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
                 data.getValue().getNombre() + " " + data.getValue().getApellido()));
@@ -99,14 +96,13 @@ public class EstudianteController {
     }
 
     @FXML
-    private void actualizar() {
+    private void refrescar() {
         txtCedula.clear();
         txtNombre.clear();
         txtApellido.clear();
         txtCorreo.clear();
         txtBuscar.clear();
         cbCarrera.getSelectionModel().selectFirst();
-        cbFiltroCarrera.getSelectionModel().selectFirst();
 
         cargarTabla();
     }
@@ -137,6 +133,11 @@ public class EstudianteController {
 
     @FXML
     private void editar() {
+
+    }
+
+    @FXML
+    private void buscar() {
 
     }
 
