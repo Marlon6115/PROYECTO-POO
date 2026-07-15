@@ -45,9 +45,7 @@
 
       <TextField fx:id="txtBuscar" layoutX="430.0" layoutY="125.0" prefHeight="35.0" prefWidth="330.0" promptText="Buscar por cédula o nombre..." />
 
-      <ComboBox fx:id="cbFiltroCarrera" layoutX="790.0" layoutY="125.0" prefHeight="35.0" prefWidth="220.0" promptText="Todas las carreras" />
-
-      <Button fx:id="btnActualizar" layoutX="1040.0" layoutY="125.0" onAction="#actualizar" prefHeight="35.0" prefWidth="110.0" text="Actualizar" />
+      <Button fx:id="btnRefrescar" layoutX="1040.0" layoutY="125.0" onAction="#refrescar" prefHeight="35.0" prefWidth="110.0" text="Refrescar" />
 
       <TableView fx:id="tablaEstudiantes" layoutX="430.0" layoutY="180.0" prefHeight="450.0" prefWidth="720.0">
          <columns>
@@ -76,6 +74,7 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Button fx:id="btnBuscar" layoutX="775.0" layoutY="125.0" onAction="#buscar" prefHeight="35.0" prefWidth="110.0" text="Buscar" />
 
    </children>
 </Pane>

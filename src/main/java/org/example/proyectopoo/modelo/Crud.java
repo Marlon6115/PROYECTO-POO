@@ -13,8 +13,6 @@ public interface Crud {
 
     public void actualizar(Estudiante estudiante);
 
-    public void eliminar(int id);
-
-    public List<Estudiante> filtrarCarrera(String carrera);
+    public void eliminar(Estudiante estudiante);
 
 }
