@@ -17,7 +17,6 @@ public class LoginController {
     @FXML private ComboBox<String> cbRol;
     @FXML private Label lblMensaje;
     @FXML private Button btnLogin;
-    @FXML private Button btnSalir;
 
     @FXML
     public void initialize() {
@@ -30,48 +29,57 @@ public class LoginController {
         String clave = txtPassword.getText();
         String rol = cbRol.getValue();
 
-        if(txtUsuario.getText().isEmpty() || txtPassword.getText().isEmpty() || cbRol.getValue() == null){
-            Alertas.error("ERROR", "Tiene que llenar todos los campos");
+        if(usuario.isEmpty() || clave.isEmpty() || rol == null){
+            lblMensaje.setText("Tiene que llenar todos los campos");
             return;
         }
 
-        Usuario existenciaUsuario = dao.bucarUsuario(usuario, clave);
+        Usuario user = new Usuario(0, usuario, clave, rol);
 
-        if(existenciaUsuario == null){
-            return;
-        }
+        Usuario existenciaUsuario = dao.buscarUsuario(user);
 
-        if(!existenciaUsuario.getRol().equals(cbRol.getValue())){
-            Alertas.error("ERROR", "El usuario, contraseña o rol estan incorrectos, intente de nuevo");
-            return;
-        }
+        if (existenciaUsuario != null) {
+            Alertas.informacion("INFORMACIÓN", "Bienvenido al sistema, " + usuario);
 
-        Alertas.informacion("INFORMACION", "Bienvenido al sistema " + txtUsuario.getText());
-        VentanaEstudiantes(existenciaUsuario.getRol());
-    }
+            try {
+                FXMLLoader loader = new FXMLLoader(ProyectoApplication.class.getResource("/org/example/proyectopoo/estudiantes.fxml"));
+                Scene scene = new Scene(loader.load());
 
-    private void VentanaEstudiantes(String rol) {
-        try {
-            FXMLLoader loader = new FXMLLoader(ProyectoApplication.class.getResource("/org/example/proyectopoo/estudiantes.fxml"));
-            Scene scene = new Scene(loader.load());
-            EstudianteController controller = loader.getController();
-            controller.setRolUsuario(rol);
+                EstudianteController controller = loader.getController();
+                controller.setRolUsuario(existenciaUsuario.getRol());
 
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Gestor de Estudiantes");
-            stage.show();
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Gestor de Estudiantes");
+                stage.show();
 
-            Stage loginStage = (Stage) btnLogin.getScene().getWindow();
-            loginStage.close();
-        } catch (Exception e) {
-            Alertas.error("ERROR", "Error al abrir la ventana: " + e.getMessage());
+                Stage loginStage = (Stage) btnLogin.getScene().getWindow();
+                loginStage.close();
+            } catch (Exception e) {
+                Alertas.error("ERROR", "Error al abrir la ventana de estudiantes: " + e.getMessage());
+            }
+
+        } else {
+            lblMensaje.setText("Usuario, contraseña o rol incorrectos.");
         }
     }
 
     @FXML
-    private void salir() {
-        Stage stage = (Stage) btnSalir.getScene().getWindow();
-        stage.close();
+    private void abrirRegistro() {
+        try {
+            FXMLLoader loader = new FXMLLoader(ProyectoApplication.class.getResource("/org/example/proyectopoo/register.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Registro de Usuario");
+            stage.show();
+
+            Stage currentStage = (Stage) txtUsuario.getScene().getWindow();
+            currentStage.close();
+        } catch (Exception e) {
+            Alertas.error("ERROR", "No se pudo abrir la ventana de registro: " + e.getMessage());
+        }
     }
+
 }

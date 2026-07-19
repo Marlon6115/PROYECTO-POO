@@ -13,8 +13,6 @@
 
    <children>
 
-      <!-- Barra superior -->
-
       <Rectangle height="55.0" style="-fx-fill: #212529;" width="700.0" x="0.0" y="0.0" />
 
       <Label layoutX="20.0" layoutY="12.0" style="-fx-text-fill: white;" text="Gestor de Estudiantes">
@@ -23,15 +21,11 @@
          </font>
       </Label>
 
-      <!-- Título -->
-
       <Label layoutX="245.0" layoutY="90.0" text="REGISTRAR USUARIO">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-
-      <!-- Usuario -->
 
       <Label layoutX="221.0" layoutY="155.0" text="Usuario">
          <font>
@@ -41,8 +35,6 @@
 
       <TextField fx:id="txtUsuario" layoutX="220.0" layoutY="182.0" prefHeight="35.0" prefWidth="298.0" promptText="Ingrese un usuario" />
 
-      <!-- Contraseña -->
-
       <Label layoutX="221.0" layoutY="231.0" text="Contraseña">
          <font>
             <Font size="14.0" />
@@ -50,8 +42,6 @@
       </Label>
 
       <PasswordField fx:id="txtClave" layoutX="219.0" layoutY="258.0" prefHeight="35.0" prefWidth="298.0" promptText="Ingrese una contraseña" />
-
-      <!-- Rol -->
 
       <Label layoutX="221.0" layoutY="311.0" text="Rol">
          <font>
@@ -61,11 +51,7 @@
 
       <ComboBox fx:id="cbRol" layoutX="219.0" layoutY="339.0" prefHeight="35.0" prefWidth="298.0" promptText="Seleccione..." />
 
-      <!-- Mensaje -->
-
       <Label fx:id="lblMensaje" layoutX="219.0" layoutY="395.0" prefWidth="298.0" textFill="RED" />
-
-      <!-- Botones -->
 
       <Button fx:id="btnRegistrar" layoutX="209.0" layoutY="432.0" mnemonicParsing="false" onAction="#registrar" prefHeight="40.0" prefWidth="321.0" text="Registrarse" />
 

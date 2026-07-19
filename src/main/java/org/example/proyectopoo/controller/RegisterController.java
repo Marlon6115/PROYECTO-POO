@@ -13,11 +13,12 @@ import org.example.proyectopoo.util.Alertas;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class RegisterController {
-    @FXML TextField txtUsuario;
-    @FXML PasswordField txtClave;
-    @FXML ComboBox<String> cbRol;
-    @FXML Label lblMensaje;
-    @FXML Button btnRegistrar, btnVolver;
+    @FXML private TextField txtUsuario;
+    @FXML private PasswordField txtClave;
+    @FXML private ComboBox<String> cbRol;
+    @FXML private Label lblMensaje;
+    @FXML private Button btnRegistrar, btnVolver;
+
     @FXML
     public void initialize(){
         cbRol.getItems().addAll("ADMIN", "ESTANDAR", "INVITADO");
@@ -25,34 +26,30 @@ public class RegisterController {
 
     private final UsarioDAO dao = new UsarioDAO();
 
-    private String encriptado(String contra){
-        String cifrado = BCrypt.hashpw(contra, BCrypt.gensalt());
-        return cifrado;
-    }
-
     public void registrar(){
         if (txtUsuario.getText().isEmpty() || txtClave.getText().isEmpty()
         || cbRol.getValue() == null){
-            Alertas.advertencia("ADVERTENCIA", "Todos los campos deben llenarse.");
+            lblMensaje.setText("Todos los campos deben llenarse.");
             return;
         }
+
+        String claveHash = BCrypt.hashpw(txtClave.getText(), BCrypt.gensalt());
 
         Usuario u = new Usuario(
                 0,
                 txtUsuario.getText(),
-                encriptado(txtClave.getText()),
+                claveHash,
                 cbRol.getValue()
         );
 
-        boolean confirmacion = Alertas.confirmacion("Confirmar usuario", "¿Desea registrar este usuario?");
-
-        if (!confirmacion){
-            Alertas.informacion("INFORMACION", "Se cancelo el registro");
-            return;
+        boolean confirmacion = Alertas.confirmacion("Confirmar registro", "¿Desea registrar este usuario?");
+        if (confirmacion) {
+            dao.nuevo(u);
+            Alertas.informacion("INFORMACION", "Usuario registrado correctamente.");
+            volver();
+        } else {
+            Alertas.informacion("INFORMACION", "El registro fue cancelado por el usuario.");
         }
-
-        dao.nuevo(u);
-        Alertas.informacion("INFORMACION", "Usuario registrado correctamente");
     }
 
     public void volver(){

@@ -70,23 +70,17 @@ public class EstudianteDAO implements Crud{
     }
 
     @Override
-    public void insertar(Estudiante estudiante) {
-
-        String sql = "insert into estudiantes (cedula, nombre, apellido, correo, carrera) values (?, ?, ?, ?, ?)";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, estudiante.getCedula());
-            ps.setString(2, estudiante.getNombre());
-            ps.setString(3, estudiante.getApellido());
-            ps.setString(4, estudiante.getCorreo());
-            ps.setString(5, estudiante.getCarrera());
-            ps.executeUpdate();
-
-        }catch (SQLException e) {
-            Alertas.error("ERROR", "Error al insertar: " + e.getMessage());
-        }
-
+    public void insertar(Estudiante estudiante) throws SQLException {
+        String sql = "INSERT INTO estudiantes(cedula, nombre, apellido, correo, carrera) VALUES(?, ?, ?, ?, ?)";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, estudiante.getCedula());
+        ps.setString(2, estudiante.getNombre());
+        ps.setString(3, estudiante.getApellido());
+        ps.setString(4, estudiante.getCorreo());
+        ps.setString(5, estudiante.getCarrera());
+        ps.executeUpdate();
     }
+
 
     @Override
     public void actualizar(Estudiante estudiante) {
