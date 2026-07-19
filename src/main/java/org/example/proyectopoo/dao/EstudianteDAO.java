@@ -90,13 +90,31 @@ public class EstudianteDAO implements Crud{
 
     @Override
     public void actualizar(Estudiante estudiante) {
+        String sql = "update estudiantes set nombre=?, apellido=?, correo=?, carrera=? where cedula=?";
 
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, estudiante.getNombre());
+            ps.setString(2, estudiante.getApellido());
+            ps.setString(3, estudiante.getCorreo());
+            ps.setString(4, estudiante.getCarrera());
+            ps.setString(5, estudiante.getCedula());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            Alertas.error("ERROR", "Error al actualizar: " + e.getMessage());
+        }
     }
 
     @Override
-    public void eliminar(Estudiante estudiante) {
+    public void eliminar(String cedula) {
+        String sql = "delete from estudiantes where cedula = ?";
 
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, cedula);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            Alertas.error("ERROR", "Error al eliminar: " + e.getMessage());
+        }
     }
-
-
 }

@@ -13,6 +13,6 @@ public interface Crud {
 
     public void actualizar(Estudiante estudiante);
 
-    public void eliminar(Estudiante estudiante);
+    public void eliminar(String cedula);
 
 }
