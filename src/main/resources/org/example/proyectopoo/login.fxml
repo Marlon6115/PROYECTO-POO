@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -43,17 +44,21 @@
 
       <PasswordField fx:id="txtPassword" layoutX="220.0" layoutY="295.0" prefHeight="35.0" prefWidth="298.0" promptText="Ingrese su contraseña" />
 
-      <Button fx:id="btnLogin" layoutX="208.0" layoutY="471.0" mnemonicParsing="false" onAction="#iniciarSesion" prefHeight="40.0" prefWidth="321.0" text="Ingresar" />
-
-      <Button fx:id="btnSalir" layoutX="207.0" layoutY="532.0" mnemonicParsing="false" onAction="#salir" prefHeight="35.0" prefWidth="321.0" text="Salir" />
-
-      <Label fx:id="lblMensaje" layoutX="220.0" layoutY="433.0" prefHeight="17.0" prefWidth="298.0" textFill="RED" />
-      <ComboBox fx:id="cbRol" layoutX="220.0" layoutY="376.0" prefHeight="35.0" prefWidth="298.0" promptText="Seleccione..." />
       <Label layoutX="221.0" layoutY="349.0" text="Rol">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
+
+      <ComboBox fx:id="cbRol" layoutX="220.0" layoutY="376.0" prefHeight="35.0" prefWidth="298.0" promptText="Seleccione..." />
+
+      <Label fx:id="lblMensaje" layoutX="218.0" layoutY="422.0" prefHeight="17.0" prefWidth="298.0" textFill="RED" />
+
+      <Label layoutX="221.0" layoutY="495.0" text="¿No tienes una cuenta?" />
+
+      <Hyperlink layoutX="350.0" layoutY="491.0" text="Regístrate aquí" onAction="#abrirRegistro"/>
+
+      <Button fx:id="btnLogin" layoutX="218.0" layoutY="451.0" mnemonicParsing="false" onAction="#iniciarSesion" prefHeight="40.0" prefWidth="298.0" text="Ingresar" />
 
    </children>
 

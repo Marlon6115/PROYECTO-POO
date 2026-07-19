@@ -12,17 +12,20 @@ import org.example.proyectopoo.dao.EstudianteDAO;
 import org.example.proyectopoo.modelo.Estudiante;
 import org.example.proyectopoo.util.Alertas;
 
+import java.sql.SQLException;
+
 public class EstudianteController {
 
     @FXML private TextField txtCedula, txtNombre, txtApellido, txtCorreo, txtBuscar;
-    @FXML private ComboBox<String> cbCarrera, cbFiltroCarrera;
+    @FXML private ComboBox<String> cbCarrera;
     @FXML private TableView<Estudiante> tablaEstudiantes;
     @FXML private TableColumn<Estudiante, Integer> colId;
-    @FXML private TableColumn<Estudiante, String> colNombreCompleto;
+    @FXML private TableColumn<Estudiante, String> colCedula;
+    @FXML private TableColumn<Estudiante, String> colNombre;
     @FXML private TableColumn<Estudiante, String> colCarrera;
     @FXML private TableColumn<Estudiante, String> colEmail;
     @FXML private Label lblUsuario;
-    @FXML private Button btnGuardar, btnRefrescar, btnEliminar, btnEditar, btnSalir, btnBuscar;
+    @FXML private Button btnGuardar, btnEliminar, btnEditar, btnSalir, btnBuscar;
 
     private final EstudianteDAO dao = new EstudianteDAO();
 
@@ -52,9 +55,10 @@ public class EstudianteController {
     @FXML
     public void initialize() {
         cbCarrera.getItems().addAll(
-                "Seleccione...", "Agua y Saneamiento Ambiental", "Desarrollo de Software", "Electromecánica", "Redes y Telecomunicaciones");
+                "Agua y Saneamiento Ambiental", "Desarrollo de Software", "Electromecánica", "Redes y Telecomunicaciones");
         colId.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
-        colNombreCompleto.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
+        colCedula.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCedula()));
+        colNombre.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
                 data.getValue().getNombre() + " " + data.getValue().getApellido()));
         colCarrera.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCarrera()));
         colEmail.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCorreo()));
@@ -71,6 +75,17 @@ public class EstudianteController {
                         cbCarrera.setValue(newSelection.getCarrera());
                     }
                 });
+        cbCarrera.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Seleccione...");
+                } else {
+                    setText(item);
+                }
+            }
+        });
     }
 
     @FXML
@@ -80,7 +95,7 @@ public class EstudianteController {
         txtApellido.clear();
         txtCorreo.clear();
         txtBuscar.clear();
-        cbCarrera.getSelectionModel().selectFirst();
+        cbCarrera.getSelectionModel().clearSelection();
 
         cargarTabla();
     }
@@ -111,7 +126,7 @@ public class EstudianteController {
             return;
         }
 
-        Estudiante e = new Estudiante(
+        Estudiante estudiante = new Estudiante(
                 0,
                 txtCedula.getText(),
                 txtNombre.getText(),
@@ -122,14 +137,17 @@ public class EstudianteController {
 
         boolean confirmacion = Alertas.confirmacion("Confirmar registro", "¿Desea registrar este estudiante?");
         if (confirmacion) {
-            dao.insertar(e);
-            cargarTabla();
-            Alertas.informacion("INFORMACION", "Estudiante registrado correctamente.");
+            try {
+                dao.insertar(estudiante);
+                Alertas.informacion("INFORMACION", "Estudiante registrado correctamente.");
+                refrescar();
+            } catch (SQLException e) {
+                Alertas.error("ERROR", "No se pudo registrar el estudiante: " + e.getMessage());
+            }
         } else {
             Alertas.informacion("INFORMACION", "El registro fue cancelado por el usuario.");
-            return;
         }
-        cargarTabla();
+
     }
 
     @FXML
@@ -150,6 +168,7 @@ public class EstudianteController {
         }
 
         cargarTabla();
+        refrescar();
     }
 
     @FXML
@@ -170,6 +189,7 @@ public class EstudianteController {
             }
         }
         cargarTabla();
+        refrescar();
     }
 
     @FXML

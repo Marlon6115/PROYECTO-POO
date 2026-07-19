@@ -33,27 +33,30 @@ public class UsarioDAO {
             Alertas.error("ERROR", "Error al crear usuario: " + e.getMessage());
         }
     }
-    public Usuario bucarUsuario(String user, String contra){
-        String sqlUser = "select * from usuarios where username = ?";
+    public Usuario buscarUsuario(Usuario usuario) {
+        String sqlUser = "SELECT * FROM usuarios WHERE username = ? AND rol = ?";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sqlUser);
-            ps.setString(1, user);
+            ps.setString(1, usuario.getUsername());
+            ps.setString(2, usuario.getRol());
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                boolean validacion = BCrypt.checkpw(contra, rs.getString("password"));
-                if (validacion){
-                    return new Usuario(rs.getInt("id"),
+
+            if (rs.next()) {
+                boolean validacion = BCrypt.checkpw(usuario.getPassword(), rs.getString("password"));
+                if (validacion) {
+                    return new Usuario(
+                            rs.getInt("id"),
                             rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("rol"));
+                            null,
+                            rs.getString("rol")
+                    );
                 }
             }
         } catch (SQLException e) {
             Alertas.error("ERROR", "Error al buscar usuario: " + e.getMessage());
             return null;
         }
-        Alertas.error("Error", "Credenciales invalidad, verifica usuario/contraseña");
         return null;
     }
 }
