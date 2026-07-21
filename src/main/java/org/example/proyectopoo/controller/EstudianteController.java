@@ -29,6 +29,48 @@ public class EstudianteController {
 
     private final EstudianteDAO dao = new EstudianteDAO();
 
+    private boolean validarDatos() {
+
+        String cedula = txtCedula.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String apellido = txtApellido.getText().trim();
+        String correo = txtCorreo.getText().trim();
+
+        if (cedula.isEmpty() || nombre.isEmpty() || apellido.isEmpty()
+                || correo.isEmpty() || cbCarrera.getValue() == null) {
+
+            Alertas.error("ERROR", "Todos los campos son obligatorios.");
+            return false;
+        }
+
+        if (!cedula.matches("\\d{10}")) {
+            Alertas.error("ERROR",
+                    "La cédula debe contener exactamente 10 números.");
+            return false;
+        }
+
+        if (!nombre.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+            Alertas.error("ERROR",
+                    "El nombre solo puede contener letras.");
+            return false;
+        }
+
+        if (!apellido.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+            Alertas.error("ERROR",
+                    "El apellido solo puede contener letras.");
+            return false;
+        }
+
+        if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            Alertas.error("ERROR",
+                    "Ingrese un correo electrónico válido. Ejemplo: usuario@gmail.com");
+            return false;
+        }
+
+        return true;
+    }
+
+
     public void setRolUsuario(String rol) {
         lblUsuario.setText("Usuario: " + rol);
 
@@ -120,9 +162,12 @@ public class EstudianteController {
 
     @FXML
     private void guardar() {
-        if (txtCedula.getText().isEmpty() || txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty()
-                || txtCorreo.getText().isEmpty() || cbCarrera.getValue() == null) {
-            Alertas.advertencia("ADVERTENCIA", "Todos los campos deben llenarse.");
+        if (!validarDatos()) {
+            return;
+        }
+
+        if (dao.existeCedula(txtCedula.getText().trim())) {
+            Alertas.error("ERROR", "Ya existe un estudiante registrado con esa cédula.");
             return;
         }
 
@@ -152,28 +197,41 @@ public class EstudianteController {
 
     @FXML
     private void eliminar() {
-        try {
-            String cedula = txtCedula.getText();
-            dao.eliminar(cedula);
-            boolean validacion = Alertas.confirmacion("CONFIRMACION", "Esta seguro de eliminar este registro");
 
-            if (!validacion){
-                Alertas.informacion("Cancelado", "Se cancelo la eliminacion.");
-                return;
-            }else {
-                Alertas.informacion("Informacion", "Se elimino el registro correctamente");
-            }
+        Estudiante seleccion = tablaEstudiantes.getSelectionModel().getSelectedItem();
+
+        if (seleccion == null) {
+            Alertas.error("ERROR", "Seleccione un estudiante para eliminar.");
+            return;
+        }
+
+        boolean validacion = Alertas.confirmacion(
+                "CONFIRMACION",
+                "¿Está seguro de eliminar este registro?"
+        );
+
+        if (!validacion) {
+            Alertas.informacion("Cancelado", "Se canceló la eliminación.");
+            return;
+        }
+
+        try {
+            dao.eliminar(seleccion.getCedula());
+            Alertas.informacion("Información", "Se eliminó el registro correctamente.");
+            cargarTabla();
+            refrescar();
         } catch (Exception e) {
             Alertas.error("ERROR", "No se pudo eliminar: " + e.getMessage());
         }
-
-        cargarTabla();
-        refrescar();
     }
 
     @FXML
     private void editar() {
         Estudiante seleccion = tablaEstudiantes.getSelectionModel().getSelectedItem();
+
+        if (!validarDatos()) {
+            return;
+        }
 
         if (seleccion != null){
             try {
