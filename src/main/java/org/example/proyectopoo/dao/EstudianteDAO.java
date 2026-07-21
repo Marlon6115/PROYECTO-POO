@@ -111,4 +111,28 @@ public class EstudianteDAO implements Crud{
             Alertas.error("ERROR", "Error al eliminar: " + e.getMessage());
         }
     }
+
+    public boolean existeCedula(String cedula) {
+
+        String sql = "SELECT COUNT(*) FROM estudiantes WHERE cedula = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, cedula);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            Alertas.error("ERROR", e.getMessage());
+        }
+
+        return false;
+    }
+
+
+
 }
