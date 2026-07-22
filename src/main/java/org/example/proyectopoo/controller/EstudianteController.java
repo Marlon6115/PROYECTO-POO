@@ -80,6 +80,11 @@ public class EstudianteController {
             btnBuscar.setVisible(true);
             btnEditar.setDisable(true);
             btnEliminar.setDisable(true);
+            txtCorreo.setDisable(true);
+            txtApellido.setDisable(true);
+            txtNombre.setDisable(true);
+            txtCedula.setDisable(true);
+            cbCarrera.setDisable(true);
 
         } else if (rol.equals("ESTANDAR")) {
             btnEliminar.setDisable(true);
