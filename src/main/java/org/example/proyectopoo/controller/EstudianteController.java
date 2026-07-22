@@ -13,6 +13,7 @@ import org.example.proyectopoo.modelo.Estudiante;
 import org.example.proyectopoo.util.Alertas;
 
 import java.sql.SQLException;
+import java.text.Normalizer;
 
 public class EstudianteController {
 
@@ -252,27 +253,44 @@ public class EstudianteController {
 
     @FXML
     private void buscar() {
-        String textoBusqueda = txtBuscar.getText().trim().toLowerCase();
+
+        String textoBusqueda = txtBuscar.getText().trim();
+
+        textoBusqueda = Normalizer.normalize(textoBusqueda, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .toLowerCase();
 
         if (textoBusqueda.isEmpty()) {
-            Alertas.advertencia("ADVERTENCIA", "Tiene que ingresar una cedula o nombre en el campo");
+            Alertas.advertencia("ADVERTENCIA",
+                    "Tiene que ingresar una cedula o nombre en el campo");
             return;
         }
+
         ObservableList<Estudiante> listaFiltrada = FXCollections.observableArrayList();
 
         for (Estudiante est : dao.seleccionarTodo()) {
-            String cedula = est.getCedula() != null ? est.getCedula().toLowerCase() : "";
-            String nombre = est.getNombre() != null ? est.getNombre().toLowerCase() : "";
-            String apellido = est.getApellido() != null ? est.getApellido().toLowerCase() : "";
 
-            if (cedula.contains(textoBusqueda) || nombre.contains(textoBusqueda) ||
-                    apellido.contains(textoBusqueda)) {
+            String cedula = est.getCedula() != null ? est.getCedula() : "";
+
+            String nombreCompleto = ((est.getNombre() != null ? est.getNombre() : "")
+                    + " "
+                    + (est.getApellido() != null ? est.getApellido() : ""));
+
+            nombreCompleto = Normalizer.normalize(nombreCompleto, Normalizer.Form.NFD)
+                    .replaceAll("\\p{M}", "")
+                    .toLowerCase();
+
+            if (cedula.contains(textoBusqueda)
+                    || nombreCompleto.contains(textoBusqueda)) {
+
                 listaFiltrada.add(est);
             }
         }
+
         tablaEstudiantes.setItems(listaFiltrada);
+
         if (listaFiltrada.isEmpty()) {
-            Alertas.error("ERROR", "No se encontro el estudiante");
+            Alertas.error("ERROR", "No se encontró el estudiante");
         }
     }
 }

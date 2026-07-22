@@ -8,8 +8,6 @@ public interface Crud {
 
     public List<Estudiante> seleccionarTodo();
 
-    public Estudiante buscar(String opcion);
-
     public void insertar(Estudiante estudiante) throws SQLException;
 
     public void actualizar(Estudiante estudiante);

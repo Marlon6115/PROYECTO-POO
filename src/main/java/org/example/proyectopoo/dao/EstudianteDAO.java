@@ -45,31 +45,6 @@ public class EstudianteDAO implements Crud{
     }
 
     @Override
-    public Estudiante buscar(String opcion) {
-
-        String sql = "select * from estudiantes where cedula = ? or concat(nombre, ' ', like ?)";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, opcion);
-            ps.setString(2, opcion);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return new Estudiante(
-                        rs.getInt("id"),
-                        rs.getString("cedula"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getString("correo"),
-                        rs.getString("carrera")
-                );
-            }
-        }catch (SQLException e) {
-            Alertas.error("ERROR", "Error al buscar: " + e.getMessage());
-        }
-        return null;
-    }
-
-    @Override
     public void insertar(Estudiante estudiante) throws SQLException {
         String sql = "INSERT INTO estudiantes(cedula, nombre, apellido, correo, carrera) VALUES(?, ?, ?, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -80,7 +55,6 @@ public class EstudianteDAO implements Crud{
         ps.setString(5, estudiante.getCarrera());
         ps.executeUpdate();
     }
-
 
     @Override
     public void actualizar(Estudiante estudiante) {
