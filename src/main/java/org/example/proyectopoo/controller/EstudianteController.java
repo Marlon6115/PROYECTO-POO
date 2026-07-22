@@ -40,7 +40,7 @@ public class EstudianteController {
         if (cedula.isEmpty() || nombre.isEmpty() || apellido.isEmpty()
                 || correo.isEmpty() || cbCarrera.getValue() == null) {
 
-            Alertas.error("ERROR", "Todos los campos son obligatorios.");
+            Alertas.advertencia("ADVERTENCIA", "Todos los campos son obligatorios.");
             return false;
         }
 
@@ -77,16 +77,12 @@ public class EstudianteController {
 
         if (rol.equals("INVITADO")) {
             btnGuardar.setDisable(true);
-            btnBuscar.setVisible(false);
-
+            btnBuscar.setVisible(true);
             btnEditar.setDisable(true);
-            btnEditar.setVisible(false);
-
             btnEliminar.setDisable(true);
-            btnEliminar.setVisible(false);
+
         } else if (rol.equals("ESTANDAR")) {
             btnEliminar.setDisable(true);
-            btnEliminar.setVisible(false);
         }
     }
 
